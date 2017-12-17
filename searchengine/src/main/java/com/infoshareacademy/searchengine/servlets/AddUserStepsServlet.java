@@ -43,30 +43,10 @@ public class AddUserStepsServlet extends AddUserFormServlet {
     }
 
     private String getNextView(int step, HttpServletRequest req, HttpServletResponse resp) {
-        if (step == 1 && !isValidData(req, resp, step)) {
-            return "/add-user-step-1.jsp";
-        } else if (step < 3) {
+        if (step < 3) {
             return "/add-user-step-" + (step + 1) + ".jsp";
         }
         return "/index.jsp";
-    }
-
-    private boolean isValidData(HttpServletRequest req, HttpServletResponse resp, int step) {
-        if (step == 1 && req.getParameter("id") != null && !req.getParameter("id").isEmpty()) {
-            if (usersRepositoryDao.getUserById(Integer.parseInt(req.getParameter("id"))) != null) {
-                resp.setStatus(HttpServletResponse.SC_CONFLICT);
-                req.setAttribute("errorMessage", "User with this ID exists.");
-                return false;
-            }
-        }
-        if (step == 1 && req.getParameter("login") != null && !req.getParameter("login").isEmpty()) {
-            if (usersRepositoryDao.getUserByLogin(req.getParameter("login")) != null) {
-                resp.setStatus(HttpServletResponse.SC_CONFLICT);
-                req.setAttribute("errorMessage", "User with this login exists.");
-                return false;
-            }
-        }
-        return true;
     }
 
     private void storeUserDataFromSteps(HttpServletRequest req, HttpServletResponse resp, int step) {
@@ -74,7 +54,6 @@ public class AddUserStepsServlet extends AddUserFormServlet {
 
         switch (step) {
             case 1:
-                user.setId(Integer.parseInt(req.getParameter("id")));
                 user.setLogin(req.getParameter("login"));
                 break;
             case 2:
@@ -84,11 +63,9 @@ public class AddUserStepsServlet extends AddUserFormServlet {
                 break;
             case 3:
                 setUserGender(req, user);
-                if (isValidData(req, resp, step)) {
-                    usersRepositoryDao.addUser(user);
-                    req.getSession().setAttribute("user", null);
-                    req.setAttribute("okMessage", "User with ID " + user.getId() + " has been added.");
-                }
+                usersRepositoryDao.addUser(user);
+                req.getSession().setAttribute("user", null);
+                req.setAttribute("okMessage", "User with ID " + user.getId() + " has been added.");
         }
     }
 }
