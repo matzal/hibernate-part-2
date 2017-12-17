@@ -5,14 +5,20 @@ import java.util.ArrayList;
 import java.util.List;
 
 @Entity
+@NamedQueries({
+        @NamedQuery(name = "selectAllUsers", query = "from User"),
+        @NamedQuery(name = "deleteUser", query = "delete from User u where u.id = :id"),
+        @NamedQuery(name = "findUserById", query = "from User u where u.id = :id"),
+        @NamedQuery(name = "findUserByLogin", query = "from User u where u.login = :login")
+})
 public class User {
 
     public User() {
     }
 
     @Id
-    @GeneratedValue(strategy= GenerationType.IDENTITY)
-    @Column(nullable=false, unique=true)
+    @GeneratedValue(strategy = GenerationType.AUTO)
+    @Column(nullable = false, unique = true)
     private int id;
 
     private String name;

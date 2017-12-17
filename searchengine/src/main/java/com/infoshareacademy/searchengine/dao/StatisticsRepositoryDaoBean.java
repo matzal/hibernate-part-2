@@ -10,18 +10,20 @@ import java.util.Map;
 public class StatisticsRepositoryDaoBean implements StatisticsRepositoryDao {
     @Override
     public void addVisit(User user) {
-        StatisticsRepository.getRepository().putIfAbsent(user, 0);
+       /* StatisticsRepository.getRepository().putIfAbsent(user, 0);
         Integer userStats = getStatisticsByUser(user);
-        StatisticsRepository.getRepository().replace(user, userStats + 1);
+        StatisticsRepository.getRepository().replace(user, userStats + 1);*/
     }
 
     @Override
     public Map<User, Integer> getAllStatistics() {
-        return StatisticsRepository.getRepository();
+//        return StatisticsRepository.getRepository();
+        return null;
     }
 
     @Override
     public Integer getStatisticsByUser(User user) {
-        return StatisticsRepository.getRepository().get(user);
+//        return StatisticsRepository.getRepository().get(user);
+        return null;
     }
 }
